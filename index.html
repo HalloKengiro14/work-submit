@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Submit Work | ระบบส่งงานออนไลน์ CASS</title>
     <link rel="icon" type="image/png" href="https://techno-chon.ac.th/_ipx/_/images/home/ctc.png">
-    
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#1976d2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
     <style>
         /* ซ่อน Scrollbar ของหน้าเว็บหลัก และทำให้เต็มจอ 100% */
         body, html {
@@ -22,9 +28,48 @@
             border: none;
             display: block;
         }
+        /* เล็กๆ สำหรับข้อความ offline (ถ้าแสดง) */
+        .offline-banner {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            background: #ffcc00;
+            color: #000;
+            text-align: center;
+            padding: 6px 8px;
+            font-size: 14px;
+            display: none;
+            z-index: 9999;
+        }
     </style>
 </head>
 <body>
-    <iframe src="https://script.google.com/macros/s/AKfycbxULf9yWQmqTn_Fx3fuKp2ysqM2KttMvpV5Lp2EXIJWOKkrk-SCAStBMf57j1j7Et5h/exec" allowfullscreen></iframe>
+    <div class="offline-banner" id="offlineBanner">คุณออฟไลน์ — เนื้อหาบางส่วนอาจไม่ถูกโหลด</div>
+    <iframe id="mainFrame" src="https://script.google.com/macros/s/AKfycbxULf9yWQmqTn_Fx3fuKp2ysqM2KttMvpV5Lp2EXIJWOKkrk-SCAStBMf57j1j7Et5h/exec" allowfullscreen></iframe>
+
+    <!-- Service Worker registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(reg) { console.log('Service Worker registered:', reg); })
+                    .catch(function(err) { console.error('Service Worker registration failed:', err); });
+            });
+        }
+
+        // show a small banner when offline
+        function updateOnlineStatus() {
+            var banner = document.getElementById('offlineBanner');
+            if (!navigator.onLine) {
+                banner.style.display = 'block';
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+        window.addEventListener('online',  updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+    </script>
 </body>
 </html>
