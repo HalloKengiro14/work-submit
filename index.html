@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Submit Work | ระบบส่งงานออนไลน์ CASS</title>
     <link rel="icon" type="image/png" href="https://techno-chon.ac.th/_ipx/_/images/home/ctc.png">
-    
+
+    <!-- PWA meta -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0a84ff">
+    <!-- iOS support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="/icons/icon-192.svg">
+
     <style>
         /* ซ่อน Scrollbar ของหน้าเว็บหลัก และทำให้เต็มจอ 100% */
         body, html {
@@ -26,5 +34,18 @@
 </head>
 <body>
     <iframe src="https://script.google.com/macros/s/AKfycbxULf9yWQmqTn_Fx3fuKp2ysqM2KttMvpV5Lp2EXIJWOKkrk-SCAStBMf57j1j7Et5h/exec" allowfullscreen></iframe>
+
+    <script>
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(reg) {
+          console.log('ServiceWorker registration successful with scope: ', reg.scope);
+        }).catch(function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+    </script>
 </body>
 </html>
